@@ -16,9 +16,11 @@ import { getManifist, getM3u8, genM3u8 } from "../utils/generator.mjs";
 router.get("/getm3u8/:id/master.m3u8", async (req, res) => {
   const id = req.params.id;
   let decryptionData = await getManifist(id);
+  console.log("D -- ", decryptionData);
   if (!decryptionData["success"]) {
       return res.redirect(req.originalUrl);
   }
+  console.log(decryptionData);
   res.header("Content-Type", "application/vnd.apple.mpegurl");
   return res.status(200).send(decryptionData['data']);
 });
@@ -29,6 +31,7 @@ router.get("/getm3u8/:id", async (req, res) => {
   if (!decryptionData["success"]) {
     return res.redirect(req.originalUrl);
   }
+  console.log(decryptionData);
   res.header("Content-Type", "application/vnd.apple.mpegurl");
   return res.status(200).send(decryptionData["data"]);
 });
