@@ -57,6 +57,7 @@ async function getUrl(id, retry = 0) {
 export async function genM3u8(id) {
   try {
     let channelUrl = await getUrl(id);
+    console.log("channelUrl::",channelUrl);
     if (channelUrl == "") {
       return {
         url: "",
@@ -88,6 +89,7 @@ export async function genM3u8(id) {
       },
     };
     let response = await fetch(channelUrl, options);
+    console.log("res :: ", response);
     let m3u8ChUrl = channelUrl.split("?");
     m3u8ChUrl = m3u8ChUrl[0];
       let cookieres = await cookieManager.setCookie(
@@ -106,11 +108,17 @@ export async function genM3u8(id) {
 
 
 export let getManifist = async function getMasterM3u8(id) {
-  let m3u8 = await cookieManager.getM3u8(id);
+  try{
+    let m3u8 = await cookieManager.getM3u8(id);
+    console.log("m3u8::", m3u8);
     if (!m3u8.success) {
         return await genM3u8(id);
     }
     return m3u8;
+  }catch(e){
+    console.error(e);
+    return null;
+  }
 }
 
 async function getLiveM3u8(url, cookie) {
